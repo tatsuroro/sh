@@ -1,0 +1,8 @@
+# /bin/sh
+
+set -eu
+: $1
+
+POST_TITLE=$1
+
+hugo new post/${POST_TITLE}.md
