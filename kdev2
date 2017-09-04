@@ -1,0 +1,15 @@
+# /bin/sh
+
+set -eu
+
+git fetch --all
+git checkout master
+git pull
+
+echo "merge master to dev2 and deploy"
+
+git checkout deployment/development_2nd
+git reset --hard master
+git push -f -u
+
+echo "deploy to dev2 done"
