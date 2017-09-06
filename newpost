@@ -5,4 +5,6 @@ set -eu
 
 POST_TITLE=$1
 
+cd ~/src/github.com/tatsuroro/tatsuroro.com/
+
 hugo new post/${POST_TITLE}.md
