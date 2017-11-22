@@ -1,25 +1,30 @@
-# /bin/sh
+#!/usr/local/bin/fish
 
-set -eu
-: $1
+# $argv[1] $argv[2]
 
-BRANCH_NAME=$1
+if [ (count $argv) -lt 2 ]
+  echo "Specify arguments. 'npr {NEXT_BRANCH_NAME} {LAST_BRANCH_NAME}'"
+  exit
+end
 
-LAST_BRANCH_NAME=`git rev-parse --abbrev-ref @`
-echo "last branch: [ ${LAST_BRANCH_NAME} ]"
+set NEXT_BRANCH_NAME $argv[1]
+set TARGET_BASE_NAME $argv[2]
+
+set LAST_BRANCH_NAME (git rev-parse --abbrev-ref @)
+echo "last branch: [ $LAST_BRANCH_NAME ]"
 
 git fetch --all
-git checkout master
+git checkout $TARGET_BASE_NAME
 git pull
 
-if [ $LAST_BRANCH_NAME = "deployment/development_2nd" -o $LAST_BRANCH_NAME = "master"  -o $LAST_BRANCH_NAME = "deployment/qa"  -o $LAST_BRANCH_NAME = "deployment/production" ]; then
-  echo "Skip delete: target is ${LAST_BRANCH_NAME}"
+if [ $LAST_BRANCH_NAME = "deployment/development_2nd" -o $LAST_BRANCH_NAME = "master"  -o $LAST_BRANCH_NAME = "deployment/qa" -o $LAST_BRANCH_NAME = "deployment/production" ]
+  echo "Skip delete: target is $LAST_BRANCH_NAME"
 else
-  echo "Delete branch: ${LAST_BRANCH_NAME}"
-  git branch -D ${LAST_BRANCH_NAME}
-fi
+  echo "Delete branch: $LAST_BRANCH_NAME"
+  git branch -D $LAST_BRANCH_NAME
+end
 
-git checkout -b ${BRANCH_NAME}
+git checkout -b $NEXT_BRANCH_NAME
 git commit --allow-empty -m "NOPR: squash me [ci skip]"
 git push -f -u
-hub pull-request
+hub pull-request  -b $TARGET_BASE_NAME
