@@ -1,0 +1,6 @@
+#! /bin/sh
+
+git config --local user.name tatsuroro
+git config --local user.email me@tatsuroro.com
+
+echo 'local git repository user name has been changed.'
