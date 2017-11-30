@@ -1,4 +1,6 @@
-#! /bin/sh
+#! /bin/bash
+
+set -e
 
 git config --local user.name tatsuroro
 git config --local user.email me@tatsuroro.com
