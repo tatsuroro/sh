@@ -48,7 +48,7 @@ echo "last branch: [ $LAST_BRANCH_NAME ]"
 
 git fetch --all
 git checkout $BASE_BRANCH_NAME
-git pull remote origin
+git pull origin $BASE_BRANCH_NAME
 
 switch $LAST_BRANCH_NAME
   case master 'deployment/*' 'release/*'
