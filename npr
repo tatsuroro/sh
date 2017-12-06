@@ -1,21 +1,54 @@
 #!/usr/local/bin/fish
 
-# $argv[1] $argv[2]
-
-if [ (count $argv) -lt 2 ]
-  echo "Specify arguments. 'npr {NEXT_BRANCH_NAME} {LAST_BRANCH_NAME}'"
-  exit
+function help_exit
+  echo 'Usage: [options] arguments...'
+  echo 'Options:'
+  echo '-c : Input manual commit comment'
+  echo 'Arguments: '
+  echo '-n : Next Branch'
+  echo '-b : Base Branch'
+  exit 1
 end
 
-set NEXT_BRANCH_NAME $argv[1]
-set TARGET_BASE_NAME $argv[2]
+if [ (count $argv) -lt 3 ]
+  help_exit
+end
+
+set argv $argv --
+
+set i 1
+while true
+  switch $argv[$i]
+    case -c
+      echo 'option -c is specified'
+      set MANUAL_COMMIT_COMMENT true
+    case -n
+      set i (math $i + 1)
+      echo "value of -n is" $argv[$i]
+      set NEXT_BRANCH_NAME $argv[$i]
+    case -b
+      set i (math $i + 1)
+      echo "value of -b is" $argv[$i]
+      set BASE_BRANCH_NAME $argv[$i]
+    case --
+      break
+  end
+  set i (math $i + 1)
+end
+
+if [ $NEXT_BRANCH_NAME -a $BASE_BRANCH_NAME ]
+  echo 'Every arguments are specified'
+else
+  echo 'Arguments are not valid'
+  exit
+end
 
 set LAST_BRANCH_NAME (git rev-parse --abbrev-ref @)
 echo "last branch: [ $LAST_BRANCH_NAME ]"
 
 git fetch --all
-git checkout $TARGET_BASE_NAME
-git pull
+git checkout $BASE_BRANCH_NAME
+git pull remote origin
 
 switch $LAST_BRANCH_NAME
   case master 'deployment/*' 'release/*'
@@ -26,6 +59,13 @@ switch $LAST_BRANCH_NAME
 end
 
 git checkout -b $NEXT_BRANCH_NAME
-git commit --allow-empty -m "NOPR: squash me [ci skip]"
+
+if [ $MANUAL_COMMIT_COMMENT ]
+  git commit --allow-empty
+else
+  git commit --allow-empty -m "NOPR: squash me [ci skip]"
+end
+
 git push -f -u
-hub pull-request  -b $TARGET_BASE_NAME
+
+hub pull-request -b $BASE_BRANCH_NAME
