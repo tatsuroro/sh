@@ -17,11 +17,12 @@ git fetch --all
 git checkout $TARGET_BASE_NAME
 git pull
 
-if [ $LAST_BRANCH_NAME = "deployment/development_2nd" -o $LAST_BRANCH_NAME = "master"  -o $LAST_BRANCH_NAME = "deployment/qa" -o $LAST_BRANCH_NAME = "deployment/production" ]
-  echo "Skip delete: target is $LAST_BRANCH_NAME"
-else
-  echo "Delete branch: $LAST_BRANCH_NAME"
-  git branch -D $LAST_BRANCH_NAME
+switch $LAST_BRANCH_NAME
+  case master 'deployment/*' 'release/*'
+    echo "Skip delete: target is $LAST_BRANCH_NAME"
+  case '*'
+    echo "Delete branch: $LAST_BRANCH_NAME"
+    git branch -D $LAST_BRANCH_NAME
 end
 
 git checkout -b $NEXT_BRANCH_NAME
