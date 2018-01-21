@@ -1,0 +1,3 @@
+#!/usr/local/bin/fish
+
+ghq list --full-path | peco | xargs rm -r

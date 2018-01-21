@@ -1,0 +1,50 @@
+#!/usr/local/bin/fish
+
+# Set alias to config.fish to enable cd in the terminal.
+
+function help_exit
+  echo 'Usage: [options] arguments...'
+  echo 'Arguments: '
+  echo '-n : Repository Name'
+  echo '-u : GitHub User or Organization Name'
+  exit 1
+end
+
+if [ (count $argv) -lt 1 ]
+  help_exit
+end
+
+set argv $argv --
+
+set GITHUB_USER_NAME "tatsuroro"
+
+set i 1
+while true
+  switch $argv[$i]
+    case -n
+      set i (math $i + 1)
+      echo "Repository is" $argv[$i]
+      set REPOSITORY_NAME $argv[$i]
+    case -u
+      set i (math $i + 1)
+      echo "Github user name is" $argv[$i]
+      set GITHUB_USER_NAME $argv[$i]
+    case --
+      break
+  end
+  set i (math $i + 1)
+end
+
+set TARGET_DIR "$HOME/src/github.com/$GITHUB_USER_NAME/$REPOSITORY_NAME"
+
+mkdir -p $TARGET_DIR
+
+echo 'Created dirctory is' $TARGET_DIR
+
+builtin cd $TARGET_DIR
+
+pwd
+
+git init
+
+hub create
