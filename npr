@@ -51,7 +51,7 @@ git checkout $BASE_BRANCH_NAME
 git pull origin $BASE_BRANCH_NAME
 
 switch $LAST_BRANCH_NAME
-  case master 'deployment/*' 'release/*'
+  case master 'deployment/*' 'release/*' 'release-*'
     echo "Skip delete: target is $LAST_BRANCH_NAME"
   case '*'
     echo "Delete branch: $LAST_BRANCH_NAME"
