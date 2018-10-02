@@ -51,7 +51,7 @@ git checkout $BASE_BRANCH_NAME
 git pull origin $BASE_BRANCH_NAME
 
 switch $LAST_BRANCH_NAME
-  case master 'deployment/*' 'release/*' 'release-*'
+  case master 'deployment/*' 'release/*' 'release-*' 'epic/*'
     echo "Skip delete: target is $LAST_BRANCH_NAME"
   case '*'
     echo "Delete branch: $LAST_BRANCH_NAME"
@@ -68,4 +68,4 @@ end
 
 git push -f -u
 
-hub pull-request -b $BASE_BRANCH_NAME
+hub pull-request -b $BASE_BRANCH_NAME -a tatsuroro
