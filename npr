@@ -7,6 +7,7 @@ function help_exit
   echo 'Arguments: '
   echo '-n : Next Branch'
   echo '-b : Base Branch'
+  echo '-a : Assignee (default tatsuroro)'
   exit 1
 end
 
@@ -14,14 +15,20 @@ if [ (count $argv) -lt 3 ]
   help_exit
 end
 
+set ASSIGNEE tatsuroro
+
 set argv $argv --
 
 set i 1
 while true
   switch $argv[$i]
     case -c
-      echo 'option -c is specified'
+      echo 'option -c (manual commit comment) is specified'
       set MANUAL_COMMIT_COMMENT true
+    case -a
+      set i (math $i + 1)
+      echo "Value of -a (assignee) is" $argv[$i]
+      set ASSIGNEE $argv[$i]
     case -n
       set i (math $i + 1)
       echo "value of -n is" $argv[$i]
@@ -51,7 +58,7 @@ git checkout $BASE_BRANCH_NAME
 git pull origin $BASE_BRANCH_NAME
 
 switch $LAST_BRANCH_NAME
-  case master 'deployment/*' 'release/*' 'release-*' 'epic/*'
+  case master develop 'deployment/*' 'release/*' 'release-*' 'epic/*'
     echo "Skip delete: target is $LAST_BRANCH_NAME"
   case '*'
     echo "Delete branch: $LAST_BRANCH_NAME"
@@ -68,4 +75,4 @@ end
 
 git push -f -u
 
-hub pull-request -b $BASE_BRANCH_NAME -a tatsuroro
+hub pull-request -b $BASE_BRANCH_NAME -a $ASSIGNEE

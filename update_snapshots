@@ -1,0 +1,6 @@
+#!/usr/local/bin/fish
+
+npm run test -- -u
+ga .
+gc -m 'Update snapshots'
+gp
