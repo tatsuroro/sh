@@ -75,4 +75,4 @@ end
 
 git push -f -u
 
-hub pull-request -b $BASE_BRANCH_NAME -a $ASSIGNEE
+hub pull-request -b $BASE_BRANCH_NAME -a $ASSIGNEE -F .github/PULL_REQUEST_TEMPLATE.md --edit
