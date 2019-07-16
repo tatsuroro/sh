@@ -1,9 +1,21 @@
 #! /bin/bash
 
-set -eu
+set -e
 : $1
 
-SWITCH=$(echo ${1} | tr '[:upper:]' '[:lower:]')
+if (( $# < 1 )); then
+  echo -e "No toggle option {on/off}: showing proxy status...\n"
 
-sudo networksetup -setwebproxystate Wi-Fi ${SWITCH}
-sudo networksetup -setsecurewebproxystate Wi-Fi ${SWITCH}
+  echo -e "Web Proxy status:"
+  sudo networksetup -getwebproxy Wi-Fi
+
+  echo -e "\nSecure Web Proxy status:"
+  sudo networksetup -getsecurewebproxy Wi-Fi
+else
+  SWITCH=$(echo ${1} | tr '[:upper:]' '[:lower:]')
+
+  sudo networksetup -setwebproxystate Wi-Fi ${SWITCH}
+  sudo networksetup -setsecurewebproxystate Wi-Fi ${SWITCH}
+
+  echo "web proxy setting is now ${SWITCH}"
+fi
