@@ -1,0 +1,9 @@
+#! /bin/bash
+
+set -eu
+: $1
+
+SWITCH=$(echo ${1} | tr '[:upper:]' '[:lower:]')
+
+sudo networksetup -setwebproxystate Wi-Fi ${SWITCH}
+sudo networksetup -setsecurewebproxystate Wi-Fi ${SWITCH}
