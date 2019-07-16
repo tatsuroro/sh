@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FILTER=${FILTER:-peco}
+FILTER=${FILTER:-fzf}
 MAX_LOG_COUNT=${MAX_LOG_COUNT:-30}
 
 if git diff --cached --quiet; then
