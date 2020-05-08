@@ -44,16 +44,20 @@ if test -z '$REPOSITORY_NAME'
   exit 1
 end
 
-set TARGET_DIR "$HOME/src/github.com/$GITHUB_USER_NAME/$REPOSITORY_NAME"
+set TMPDIR "/tmp/ghq_init"
+set TMPREPODIR "$TMPDIR/$GITHUB_USER_NAME/$REPOSITORY_NAME"
 
-mkdir -p $TARGET_DIR
+mkdir -p $TMPREPODIR
+builtin cd $TMPREPODIR
 
-echo 'Created dirctory is' $TARGET_DIR
-
-builtin cd $TARGET_DIR
-
-pwd
-
-git init
-
+hub init
 hub create
+
+set USER_REPO_NAME "$GITHUB_USER_NAME/$REPOSITORY_NAME"
+
+ghq get $USER_REPO_NAME
+
+set GHQROOT (ghq root)
+builtin cd "$GHQROOT/github.com/$USER_REPO_NAME"
+
+rm -rf $TMPREPODIR
