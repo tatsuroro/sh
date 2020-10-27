@@ -5,7 +5,7 @@ function help_exit
   echo 'Options:'
   echo '-c : Input manual commit comment'
   echo 'Arguments: '
-  echo '-n : Next Branch'
+  echo -e '-n : Next Branch\n'
   echo '-b : Base Branch'
   echo '-a : Assignee (default tatsuroro)'
   exit 1
