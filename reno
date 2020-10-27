@@ -1,0 +1,8 @@
+#! /bin/bash
+
+set -eu
+: $1
+
+TARGET_BRANCH=$1
+
+git switch ${TARGET_BRANCH} && yarn && yarn build:dev
